@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-idcardreader"
+    version="1.0.0">
+	<name>IdCardReader</name>
+	<description>idcardreader plugin is use for intsig idcard sdk</description>
+	<author>kmeb.net</author>
+
+
+	<js-module src="www/idcardreader.js" name="IdCardReader">
+        <clobbers target="navigator.IdCardReader" />
+    </js-module>
+
+    <platform name="android">
+        
+        <preference name="IDCARD_TEMP_PATH" value="/sdcard/idcardscan/"/>
+        <preference name="APP_KEY" value="YOUR APP KEY"/>
+    
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="IdCardReader" >
+                <param name="android-package" value="org.apache.cordova.idcard.IdCardPlugin"/>
+                <param name="onload" value="true" />
+            </feature>
+            <preference name="idcard_temp_path" value="$IDCARD_TEMP_PATH"/>
+            <preference name="APP_KEY" value="$APP_KEY"/>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/*">  
+            <uses-permission android:name="android.permission.CAMERA" />
+		    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+		    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+		    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>  
+        </config-file> 
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">  
+            <activity android:name="com.intsig.idcardscan.sdk.ISCardScanActivity"></activity>
+        </config-file>
+        <source-file src="src/android/IdCardPlugin.java" target-dir="src/org/apache/plugin/idcard" />
+        <source-file src="src/android/armeabi-v7a/libIDCardScan.so" target-dir="libs/armeabi-v7a" /> 
+        <source-file src="src/android/arm64-v8a/libIDCardScan.so" target-dir="libs/arm64-v8a" /> 
+        <source-file src="src/android/idcardscansdk.jar" target-dir="libs" />
+    </platform>
+
+ </plugin>
