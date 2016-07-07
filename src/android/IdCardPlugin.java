@@ -3,6 +3,7 @@ package org.apache.cordova.idcard;
 import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
+import android.text.TextUtils;
 
 import com.intsig.idcardscan.sdk.ISCardScanActivity;
 import com.intsig.idcardscan.sdk.ResultData;
@@ -18,8 +19,6 @@ import org.json.JSONObject;
  */
 public class IdCardPlugin extends CordovaPlugin {
 
-  private static final String TAG = "MainActivity";
-  private static final String APP_KEY ="M0NSRQr5DbgAf2e62TVVfUfL";//替换您申请的合合信息授权提供的APP_KEY;
   private static final int REQ_CODE_CAPTURE = 100;
   public static final String PLUGIN_ACTION = "readIdCard";
 
@@ -35,26 +34,26 @@ public class IdCardPlugin extends CordovaPlugin {
 
     if (action.equals(PLUGIN_ACTION)) {
 
+       JSONObject arg_object = args.getJSONObject(0);
+       String appkey = arg_object.getString("appkey");
+       if(TextUtils.isEmpty(appkey)){
+          callbackContext.error("未获取APP_KEY");
+          return false;
+       }
+
       //通过Intent调用SDK中的相机拍摄模块ISCardScanActivity进行识别
       Intent intent = new Intent(cordova.getActivity(), ISCardScanActivity.class);
       //指定要临时保存的身份证图片路径
-      intent.putExtra(ISCardScanActivity.EXTRA_KEY_IMAGE_FOLDER, preferences.getString("idcard_temp_path",""));
+      intent.putExtra(ISCardScanActivity.EXTRA_KEY_IMAGE_FOLDER, preferences.getString("idcard_temp_path","/sdcard/idcardscan/"));
       //指定SDK相机模块ISCardScanActivity四边框角线条,检测到身份证图片后的颜色,可以不传递
       intent.putExtra(ISCardScanActivity.EXTRA_KEY_COLOR_MATCH, 0xffff0000);
       //指定SDK相机模块ISCardScanActivity四边框角线条颜色，正常显示颜色,可以不传递
       intent.putExtra(ISCardScanActivity.EXTRA_KEY_COLOR_NORMAL, 0xff00ff00);
       //合合信息授权提供的APP_KEY
-      intent.putExtra(ISCardScanActivity.EXTRA_KEY_APP_KEY, preferences.getString("APP_KEY",""));
+      intent.putExtra(ISCardScanActivity.EXTRA_KEY_APP_KEY, appkey);
       //指定SDK相机模块ISCardScanActivity界面提示字符串，可以自定义
       intent.putExtra(ISCardScanActivity.EXTRA_KEY_TIPS, "请将身份证放在框内识别");
       this.cordova.startActivityForResult(this,intent, REQ_CODE_CAPTURE);
-
-      //下面三句为cordova插件回调页面的逻辑代码
-      //PluginResult mPlugin = new PluginResult(PluginResult.Status.NO_RESULT);
-      //mPlugin.setKeepCallback(true);
-
-      //callbackContext.sendPluginResult(mPlugin);
-     //callbackContext.success("success");
 
       return true;
     }

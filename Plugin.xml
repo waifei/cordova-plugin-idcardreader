@@ -15,7 +15,7 @@
     <platform name="android">
         
         <preference name="IDCARD_TEMP_PATH" value="/sdcard/idcardscan/"/>
-        <preference name="APP_KEY" value="YOUR APP KEY"/>
+        <!--<preference name="APP_KEY" value="YOUR APP KEY"/>-->
     
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="IdCardReader" >
@@ -23,7 +23,7 @@
                 <param name="onload" value="true" />
             </feature>
             <preference name="idcard_temp_path" value="$IDCARD_TEMP_PATH"/>
-            <preference name="APP_KEY" value="$APP_KEY"/>
+            <!--<preference name="APP_KEY" value="$APP_KEY"/>-->
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">  
             <uses-permission android:name="android.permission.CAMERA" />
