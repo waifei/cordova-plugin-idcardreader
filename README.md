@@ -18,4 +18,4 @@ A cordova plugin of android platform for intsig idcard ocr sdk
     	},'your appkey')
     }
 ```
- 执行结果，返回json数组
+ 执行成功，返回json字符串
